@@ -53,6 +53,8 @@ public/index.html   Screens: home, lobby, game
 public/style.css    Responsive layout and player colors
 public/app.js       Connection, reconnect, drawing, input
 public/tutorial.js  "How to play" animated lesson (no server involved)
+public/hero.js      Self-playing preview board on the home screen
+public/shared.js    Symbols, bridge classes and the motion preference check
 test/               Rules, room and real-socket tests
 render.yaml         Deployment settings for Render
 ```

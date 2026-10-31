@@ -15,6 +15,8 @@ const STATIC_FILES = {
   '/style.css': ['style.css', 'text/css; charset=utf-8'],
   '/app.js': ['app.js', 'text/javascript; charset=utf-8'],
   '/tutorial.js': ['tutorial.js', 'text/javascript; charset=utf-8'],
+  '/hero.js': ['hero.js', 'text/javascript; charset=utf-8'],
+  '/shared.js': ['shared.js', 'text/javascript; charset=utf-8'],
 };
 
 const SECURITY_HEADERS = {

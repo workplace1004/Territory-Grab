@@ -2,8 +2,10 @@
 // Board frames are rows of text: A/B are bright (biggest group), a/b are dim, and . is empty.
 // `tap` is [row, col] for the square being tapped. `win` makes Red's bright squares pulse.
 
+import { linkClasses, SYMBOLS } from './shared.js';
+
 const FRAME_MS = 2400;
-const SYMBOLS = { a: '●', b: '▲' };
+const SYMBOL_BY_MARK = { a: SYMBOLS[0], b: SYMBOLS[1] };
 
 const STEPS = [
   {
@@ -71,8 +73,10 @@ function frameCount(step) {
   return (step.frames ?? step.cards).length;
 }
 
-function drawBoard(frame) {
+function drawBoard(frame, previous) {
   const cols = frame.rows[0].length;
+  const owners = frame.rows.join('').toLowerCase().split('');
+  const before = previous?.rows.join('');
   const board = document.createElement('div');
   board.className = 'demo-board';
   board.style.setProperty('--cols', cols);
@@ -87,10 +91,13 @@ function drawBoard(frame) {
       } else {
         const lower = mark.toLowerCase();
         const bright = mark !== lower;
+        const index = rowIndex * cols + colIndex;
         cell.className = `cell owned slot-${lower === 'a' ? 0 : 1}`;
+        cell.classList.add(...linkClasses(owners, index, cols, (owner) => owner !== '.'));
         if (bright) cell.classList.add('core');
         if (mark === 'A' && frame.win) cell.classList.add('win');
-        cell.textContent = SYMBOLS[lower];
+        if (before?.[index] === '.') cell.classList.add('fresh');
+        cell.textContent = SYMBOL_BY_MARK[lower];
       }
       board.append(cell);
     });
@@ -123,7 +130,7 @@ function drawFrame() {
     return;
   }
   const frame = step.frames[frameIndex];
-  $('learn-scene').replaceChildren(drawBoard(frame));
+  $('learn-scene').replaceChildren(drawBoard(frame, step.frames[frameIndex - 1]));
   $('learn-note').textContent = frame.note;
   $('learn-note').hidden = false;
 }
@@ -156,6 +163,12 @@ function showStep(index) {
   $('learn-back').disabled = index === 0;
   $('learn-next').textContent = index === STEPS.length - 1 ? 'Got it!' : 'Next';
   drawFrame();
+  if (!reducedMotion.matches) {
+    const keyframes = [{ opacity: 0, transform: 'translateX(14px)' }, { opacity: 1, transform: 'none' }];
+    for (const id of ['learn-body', 'learn-scene']) {
+      $(id).animate(keyframes, { duration: 260, easing: 'ease-out' });
+    }
+  }
   schedule();
 }
 

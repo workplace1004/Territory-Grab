@@ -49,6 +49,8 @@ test('serves the game files and health check with security headers', async () =>
   assert.match(await page.text(), /Territory Grab/);
   assert.equal((await fetch(`http://${base}/app.js`)).status, 200);
   assert.equal((await fetch(`http://${base}/tutorial.js`)).status, 200);
+  assert.equal((await fetch(`http://${base}/hero.js`)).status, 200);
+  assert.equal((await fetch(`http://${base}/shared.js`)).status, 200);
   assert.equal((await fetch(`http://${base}/style.css`)).status, 200);
   assert.equal(await (await fetch(`http://${base}/health`)).text(), 'ok');
 });
